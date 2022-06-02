@@ -17,8 +17,9 @@ Usage of ```TotalSeq_cellranger.py``` is as follows :
  -f/--fastq-file-list             - File list containing complete path names for fastq.gz files.
  -a/--aim                         - Cellranger mode to run the analysis. Could be MULTI/COUNT
 ```
+Since we are getting the whole path in -f option our analysis will be done in that directory. So we can run our command in our own home but the analysis will be performed in the path directory.
 
-In additin to the main script we will need a CMO_reference.csv file (similar to Illumina Samplesheet) and config files for each of the samples. These files will change a little bit depending on MULTI or COUNT purposes.
+In the path direcotry as long with fastq files we will need a CMO_reference.csv file (similar to Illumina Samplesheet) and config files for each of the samples. These files will change a little bit depending on MULTI or COUNT purposes.
 
 Information about HTO - sample link and HTO sequence have to be provided by the company.
 
@@ -44,7 +45,9 @@ $ cat ./cellranger/MULTI/sample.list
 /share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_GEX_S1_L002_R2_001.fastq.gz
 ```
 
-And where, ```CMO_reference.csv``` and ```MMC-79-89-93-A.config``` will look:
+And where, ```CMO_reference.csv``` and ```MMC-79-89-93-A.config``` will look in the ```/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/``` location:
+
+
 ```bash
 $ cat ./cellranger/MULTI/CMO_reference.csv 
 id,name,read,pattern,sequence,feature_type
@@ -76,7 +79,7 @@ In the TotalSeq/COUNT directory you will have the main script ```TotalSeq_cellra
 
 Example:
 ```
-python /cellranger/TotalSeq_cellranger.py -f sample.lst -c ./cellranger/config_cellranger.yml -a COUNT
+python TotalSeq_cellranger.py -f sample.lst -c config_cellranger.yml -a COUNT
 ```
 
 where, ```sample.lst``` file contains the absolute path to fastq file(s). Each sample will be comprised of 8 fastq files. 
@@ -91,7 +94,9 @@ $ cat ./cellranger/COUNT/sample.list
 /share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_GEX_S1_L002_R1_001.fastq.gz
 /share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_GEX_S1_L002_R2_001.fastq.gz
 ```
-And where, ```CMO_reference.csv``` and ```MMC-79-89-93-A_count_Abs.config``` will look:
+And where, ```CMO_reference.csv``` and ```MMC-79-89-93-A_count_Abs.config``` will look in the ```/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/``` location:
+
+
 ```bash
 $ cat ./cellranger/COUNT/CMO_reference.csv 
 id,name,read,pattern,sequence,feature_type
@@ -162,7 +167,7 @@ First we will create the desired folder structure using ```create_proj_str.py```
 Usage:
 
 ```python
- -p/--path /share/home/maider/pipelines/scRNAseq - Project path
+ -p/--path  <Project path>
  
 ```
 Example:
@@ -242,7 +247,7 @@ default:
 
 ```
 
-One the configuration file is set we will run ```scRNASeq_Integration_TotalSeq.R``` script in which data will be filtered, normalized and samples will be integrated in a unique matrix.
+Once the configuration file is set we will run ```scRNASeq_Integration_TotalSeq.R``` script in which data will be filtered, normalized and samples will be integrated in a unique matrix.
 
 ```
 Rscript scRNASeq_Integration_TotalSeq.R
