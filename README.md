@@ -24,9 +24,11 @@ Information about HTO - sample link and HTO sequence have to be provided by the 
 
 #### Cellranger MULTI option
 
+In the TotalSeq/MULTI directory you will have the main script ```TotalSeq_cellranger.py```:
+
 Example:
 ```
-python ./cellranger/TotalSeq_cellranger.py -f sample.lst -c ./cellranger/config_cellranger.yml -a MULTI
+python TotalSeq_cellranger.py -f sample.lst -c config_cellranger.yml -a MULTI
 ```
 
 where, ```sample.lst``` file contains the absolute path to fastq file(s). Each sample will be comprised of 8 fastq files. 
@@ -51,7 +53,7 @@ HTO2,HTO2,R2,5PNNNNNNNNNN(BC),TGATGGCCTATTGGG,Multiplexing Capture
 HTO3,HTO3,R2,5PNNNNNNNNNN(BC),TTCCGCCTCTCTTTG,Multiplexing Capture
 HTO4,HTO4,R2,5PNNNNNNNNNN(BC),AGTAAGTTCAGCGTA,Multiplexing Capture
 
-$ cat ./cellranger/MULTI/MMC-79-89-93-A.config
+$ cat MULTI/MMC-79-89-93-A.config
 [gene-expression]
 reference,/share/data/RNA_Seq/reference_genomes/10X_genomics/human/refdata-cellranger-GRCh38-3.0.0/
 cmo-set,/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/CMO_reference.csv
@@ -69,6 +71,8 @@ MMC-0093,HTO3
 ```
 
 #### Cellranger COUNT option
+
+In the TotalSeq/COUNT directory you will have the main script ```TotalSeq_cellranger.py```:
 
 Example:
 ```
@@ -103,7 +107,8 @@ fastqs,sample,library_type
 ```
 #### Running Cellranger for Chromium Single Cell Gene Expression data
 
-The mian script of this analysis will be ```cellranger_count.py``` script.
+In the 10xCOUNT directory you will have the main script ```cellranger_count.py```
+
 Usage:
 
 ```python
@@ -113,7 +118,7 @@ Usage:
 
 Example:
 ```
-python ./cellranger/10xCOUNT/cellranger_count.py -f sample.lst -c ./cellranger/config_cellranger.yml
+python cellranger_count.py -f sample.lst -c config_cellranger.yml
 ```
 
 where, ```sample.lst``` file contains the absolute path to fastq file(s).
@@ -135,7 +140,7 @@ composed of different parts allowing to build the workflow,
 to provide software parameters, to compress or remove
 temporary/intermediate data, and to set up the scheduler if needed (see figure below for more details).
 
-This file works for any of the options above.
+This file works for any of the options above and will be located in each directory.
 
 ```bash
 $ cat ./cellranger/config_cellranger.yml
