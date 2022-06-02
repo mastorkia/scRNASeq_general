@@ -1,0 +1,35 @@
+default:
+  data_location: "data"
+  cellranger_out: "/share/data/RNA_Seq/10X/Raw_fastq/" #output location for all samples
+  cellranger_option: "COUNT" #can be MULTI or COUNT
+  metadata_file: "seurat_sample_metadata.csv"
+  condition_reference: "HC" #condition to use as reference
+  quality_location: "Quality_figures/" #output of quality figures
+  seurat_object: "Seurat_objects/" #output of Seurat object
+  seurat_object_name: "Seurat_object.RData" #name of the output Seurat object
+  seurat_object_dim: "dim_Seurat_object.RData" #name of the output Seurat obejct with dimensio reduction
+  integration_folder: "Integration_results/" #outout of downstream integration figures and tables
+  DE_folder: "DE_Analysis/" #output of DE analysis
+  enrichment_folder: "Enrichment_files/" #output of files to load in GSEA
+  
+#These all are for filtering steps
+  min_cells: 3 
+  min_features: 200
+  nFeature_max: 8000
+  nFeature_min: 50
+  nCount_max: 60000
+  nCount_min: 20
+  percent_mit: 10
+  HVF_selection: 2000
+
+#Number of dimensions to use for reduction
+  npcs: 30
+  resolution: 0.3
+  Cell_type_markers: D3D,KLRF1,FCGR3A,CD14,CD1C,IL3RA,IGKC,MYL9,HBB,CD79A
+
+  markers_outfile: "Markers.csv" #output name of markers
+
+#Downstream analysis
+  min.pct: 0.1
+  log.fc_threshold_markers: 0.25
+  log.fc_threshold_DE: 0.25
