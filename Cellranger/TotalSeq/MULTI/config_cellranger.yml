@@ -1,0 +1,5 @@
+transcriptome_loc:/share/data/RNA_Seq/reference_genomes/10X_genomics/human/refdata-cellranger-GRCh38-3.0.0/
+software_loc:/share/data/software/cellranger/cellranger-6.1.2/bin/cellranger
+expect_cells:1000
+local_cores:16
+local_mem:10G
