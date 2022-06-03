@@ -19,7 +19,7 @@ Usage of ```TotalSeq_cellranger.py``` is as follows :
 ```
 Since we are getting the whole path in -f option our analysis will be done in that directory. So we can run our command in our own home but the analysis will be performed in the path directory.
 
-In the path direcotry as long with fastq files we will need a CMO_reference.csv file (similar to Illumina Samplesheet) and config files for each of the samples. These files will change a little bit depending on MULTI or COUNT purposes.
+In the path direcotry as long with fastq files we will need CMO_reference.csv(one for MULTI mode, one for each file in COUNT mode) file (similar to Illumina Samplesheet) and config files for each of the samples. These files will change a little bit depending on MULTI or COUNT purposes.
 
 Information about HTO - sample link and HTO sequence have to be provided by the company.
 
@@ -94,16 +94,15 @@ $ cat ./cellranger/COUNT/sample.list
 /share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_GEX_S1_L002_R1_001.fastq.gz
 /share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_GEX_S1_L002_R2_001.fastq.gz
 ```
-And where, ```CMO_reference.csv``` and ```MMC-79-89-93-A_count_Abs.config``` will look in the ```/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/``` location:
+And where, ```MMC-79-89-93-A_CMO.csv``` and ```MMC-79-89-93-A_count_Abs.config``` will look in the ```/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/``` location:
 
 
 ```bash
-$ cat ./cellranger/COUNT/CMO_reference.csv 
+$ cat ./cellranger/COUNT/MMC-79-89-93-A_CMO.csv 
 id,name,read,pattern,sequence,feature_type
-HTO1,HTO1,R2,5PNNNNNNNNNN(BC),GTCAACTCTTTAGCG,Antibody Capture
-HTO2,HTO2,R2,5PNNNNNNNNNN(BC),TGATGGCCTATTGGG,Antibody Capture
-HTO3,HTO3,R2,5PNNNNNNNNNN(BC),TTCCGCCTCTCTTTG,Antibody Capture
-HTO4,HTO4,R2,5PNNNNNNNNNN(BC),AGTAAGTTCAGCGTA,Antibody Capture
+MMC_0079,MMC_0079,R2,5PNNNNNNNNNN(BC),GTCAACTCTTTAGCG,Antibody Capture
+MMC_0089,MMC_0089,R2,5PNNNNNNNNNN(BC),TGATGGCCTATTGGG,Antibody Capture
+MMC_0093,MMC_0093,R2,5PNNNNNNNNNN(BC),TTCCGCCTCTCTTTG,Antibody Capture
 
 $ cat ./cellranger/COUNT/MMC-79-89-93-A_count_Abs.config
 fastqs,sample,library_type
