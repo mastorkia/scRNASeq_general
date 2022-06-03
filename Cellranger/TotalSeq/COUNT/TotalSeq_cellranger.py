@@ -106,7 +106,7 @@ def run_cellranger():
             " | qsub -S /bin/sh -V -N " + job_name + " -l h_vmem=" + mem + " -pe smp " +  num_cores + " -e " + dir_name + "/" + " -o " +  dir_name + "/" +  " -j y -cwd"
 
         elif aim == 'COUNT':
-            cmd = "echo " + cellranger_loc + " count --id=" + sample_name + " --libraries=" + sample_name + "_count_Abs.config " + "--feature-ref=" + dir_name + "/CMO_reference.csv --expect-cells=" + expected_cells + " --transcriptome=" + this_transcriptome_loc + \
+            cmd = "echo " + cellranger_loc + " count --id=" + sample_name + " --libraries=" + sample_name + "_count_Abs.config " + "--feature-ref=" + sample_name + "_CMO.csv --expect-cells=" + expected_cells + " --transcriptome=" + this_transcriptome_loc + \
             " | qsub -S /bin/sh -V -N " + job_name + " -l h_vmem=" + mem + " -pe smp " + num_cores + " -e " + dir_name + "/" + " -o " + dir_name + "/" + " -j y -cwd"
 
         #generate a SLURM command
