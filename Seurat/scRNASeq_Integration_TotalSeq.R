@@ -2,7 +2,6 @@
 message("Starting job...")
 
 #.libPaths("/share/home/maider/R_libraries/R/x86_64-redhat-linux-gnu-library/4.1")
-#Uncomment this if using in the server
 
 message("Loading required libraries")
 #Libraries needed for the analysis
@@ -35,7 +34,7 @@ cell_ranger_output <- list.dirs(config$data_location,recursive = F)
 sample_names <- sub('.*\\/', '', cell_ranger_output)
 print(sample_names)
 
-#FUNCTION_1: Create demultiplexed objects for each multiplexed files. This coming from Cellranger COUNT mode
+#FUNCTION_1: Create demultiplexed objects from each multiplexed files. This is coming from Cellranger COUNT mode
 if (config$cellranger_option=="COUNT"){
 create_object <- function(sample_list,data_dir){
 
@@ -84,7 +83,7 @@ create_object <- function(sample_list,data_dir){
 
     Idents(Sample.hashtag) <- "HTO_classification.global"
 
-    png(file ="nCount_violin.png",  
+    png(file =paste0(config$quality_location,sample_list,"nCount_violin.png"),  
       width = 1000,
       height = 1200)
 
@@ -106,23 +105,30 @@ create_object <- function(sample_list,data_dir){
     # Extract the singlets  
     Sample.singlet <- subset(Sample.hashtag, idents = "Singlet")
     #Normalize data and find variable genes.
-    Sample.singlet <- NormalizeData(Sample.singlet)
-    Sample.singlet <- FindVariableFeatures(Sample.singlet, selection.method = "vst", nfeatures = config$HVF_selection)
-
+    Samples <- SplitObject(Sample.singlet, split.by = "HTO_maxID")
 }
 
 Object_list <- mapply(FUN=create_object,sample_names, cell_ranger_output)
+Object_list <- unlist(Object_list)
+names(Object_list) <- gsub(".*\\.", "",names(Object_list))
+samples_names <- names(Object_list)
 
-}
+  } else if (config$cellranger_option=="MULTI") {
+    
+  create_object <- function(sample_list,data_dir){
+    Sample_dataset <- Read10X(data_dir)
+    # Initialize the Sample_object object with the raw (non-normalized data).
+    Sample_object <- CreateSeuratObject(counts = Sample_dataset[["Gene Expression"]], project = paste0(sample_list), min.cells = config$min_cells, min.features = config$min_features) 
+  } 
+  
+Object_list <- mapply(FUN=create_object,sample_names, cell_ranger_output)
 
+} else {
+    print("cellranger option is not correct")
+  }
 
-#Load metadata information and get the samples.
-#FUNCTION_2: Create demultiplexed objects for each multiplexed files. This coming from Cellranger MULTI mode
-if (config$cellranger_option=="MULTI") {
-create_object <- function(sample_list,data_dir){
-  Sample_dataset <- Read10X(data_dir)
-  # Initialize the Sample_object object with the raw (non-normalized data).
-  Sample_object <- CreateSeuratObject(counts = Sample_dataset[["Gene Expression"]], project = paste0(sample_list), min.cells = config$min_cells, min.features = config$min_features)
+#After creating obejcts for each sample start the filtering steps:
+filtering_object <- function(Sample_object,sample_list){  
   Sample_object[["percent.mt"]] <- PercentageFeatureSet(Sample_object, pattern = "^MT-")
   #Filtering
   Sample_object <- subset(Sample_object, subset = nFeature_RNA > config$nFeature_min & nFeature_RNA < config$nFeature_max & nCount_RNA < config$nCount_max & nCount_RNA > config$nCount_min & percent.mt < config$percent_mit)
@@ -153,11 +159,11 @@ create_object <- function(sample_list,data_dir){
   Sample_object <- FindVariableFeatures(Sample_object, selection.method = "vst", nfeatures = config$HVF_selection)
 }
 
+Object_list <- lapply(FUN=filtering_object, Object_list, sample_names)
 message("**Starting with QC and data normalization...**")
 #Run the function through all samples and get one object per sample. 
-Object_list <- mapply(FUN=create_object,sample_names, cell_ranger_output)
 
-}
+
 
 print(Sys.time())
 
@@ -242,4 +248,3 @@ write.table(Normalized_counts_mat, file=paste0(config$seurat_object,"Normalized_
 print(Sys.time())
 #message("Creating html report") 
 #knitr::spin("scRNASeq_Integration.R")
-
