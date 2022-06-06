@@ -37,10 +37,11 @@ print(sample_names)
 #FUNCTION_1: Create demultiplexed objects from each multiplexed files. This is coming from Cellranger COUNT mode
 if (config$cellranger_option=="COUNT"){
 create_object <- function(sample_list,data_dir){
-
+    print("You are using cellranger COUNT mode, therefore your samples will be demultiplexed")
+  
     Sample_dataset <- Read10X(data_dir)
-    Sample_expression <- CreateSeuratObject(counts = Sample_dataset[["Gene Expression"]], project = "Sample_test")
-    Sample_antibody <- CreateSeuratObject(counts = Sample_dataset[["Antibody Capture"]], project = "Sample_test")
+    Sample_expression <- CreateSeuratObject(counts = Sample_dataset[["Gene Expression"]], project = paste0(sample_list))
+    Sample_antibody <- CreateSeuratObject(counts = Sample_dataset[["Antibody Capture"]], project = paste0(sample_list))
 
     # filtered the cells for you, but perform this step for clarity.
     joint.bcs <- intersect(colnames(Sample_expression), colnames(Sample_antibody))
@@ -56,7 +57,7 @@ create_object <- function(sample_list,data_dir){
     Sample.hashtag <- ScaleData(Sample.hashtag, features = VariableFeatures(Sample.hashtag))
 
     # Add HTO data as a new assay independent from RNA
-    Sample.hashtag[["HTO"]] <- CreateAssayObject(counts = Sample_antibody, project = "Sample_test")
+    Sample.hashtag[["HTO"]] <- CreateAssayObject(counts = Sample_antibody, project = paste0(sample_list))
 
 
     #Demultiplex cells based on HTO enrichment
@@ -104,8 +105,12 @@ create_object <- function(sample_list,data_dir){
 
     # Extract the singlets  
     Sample.singlet <- subset(Sample.hashtag, idents = "Singlet")
+    Sample.singlet@meta.data$HTO_maxID <- gsub("-", "_",Sample.singlet@meta.data$HTO_maxID)
+    Sample.singlet@meta.data$orig.ident <-  Sample.singlet@meta.data$HTO_maxID
+    
     #Normalize data and find variable genes.
     Samples <- SplitObject(Sample.singlet, split.by = "HTO_maxID")
+    
 }
 
 Object_list <- mapply(FUN=create_object,sample_names, cell_ranger_output)
@@ -116,6 +121,7 @@ samples_names <- names(Object_list)
   } else if (config$cellranger_option=="MULTI") {
     
   create_object <- function(sample_list,data_dir){
+    print("You are using cellranger MULTI mode")
     Sample_dataset <- Read10X(data_dir)
     # Initialize the Sample_object object with the raw (non-normalized data).
     Sample_object <- CreateSeuratObject(counts = Sample_dataset[["Gene Expression"]], project = paste0(sample_list), min.cells = config$min_cells, min.features = config$min_features) 
@@ -124,7 +130,7 @@ samples_names <- names(Object_list)
 Object_list <- mapply(FUN=create_object,sample_names, cell_ranger_output)
 
 } else {
-    print("cellranger option is not correct")
+    print("Cellranger option is not correct")
   }
 
 #After creating obejcts for each sample start the filtering steps:
@@ -174,6 +180,8 @@ print(Sys.time())
 #}
 
 #Object_list <- mapply(FUN=subset_object,Object_list)
+
+#Select number of most variable genes to integrate the data
 features <- SelectIntegrationFeatures(object.list = Object_list, nfeatures = config$HVF_selection)
 
 dim_red <- function(Object_list){
@@ -197,11 +205,17 @@ if (length(Object_list) > 1) {
   
   DefaultAssay(Integrated_data) <- "integrated"
 } else {
+  #If we are only working with one sample
   Integrated_data <- Object_list[[1]]
 }
 print(Sys.time())
 
 message("**Load metadata and add information to object**")
+
+#rename object list to match the metadata.
+names(Object_list) <- sub('-', '_', names(Object_list))
+
+
 #Add to metadata condition information about each sample.
 metadata <- read.csv(config$metadata_file, header = T)
 cell_names <- rownames(Integrated_data@meta.data)
