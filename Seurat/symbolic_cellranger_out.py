@@ -5,10 +5,10 @@ import logging
 import pandas as pd
 import shutil
 
-'''Usage:create_cellranger_output.py -cp <path containing cellranger output for all samples> -m csv file containing sample name and condition information'''
+'''Usage:create_cellranger_output.py -cp <path containing cellranger output for all samples> -m <csv file containing sample name and condition information>'''
 
 def msg():
-    return ''' This script create the directory structure need to run Seurat R script. Exiting.... '''
+    return ''' This script creates necessary cellranger data output configuration to run Seurat. Exiting.... '''
 
 def parse_arguments():
     '''Adding the command line arguments to be provided while running the script'''
@@ -38,9 +38,9 @@ def make_sample_directories():
     sample_names=metadata_file['orig.ident']
 
     for sample in sample_names:
-        os.mkdir('data/' + sample)
-        target_dir='data/' + sample + "/"
-        source_dir = cellranger_path + sample + '/outs/filtered_feature_bc_matrix/'
+        os.mkdir(cellranger_path + '/data/' + sample)
+        target_dir=cellranger_path + '/data/' + sample + "/"
+        source_dir = cellranger_path + "/" + sample + '/outs/filtered_feature_bc_matrix/'
     
     for filename in os.listdir(source_dir):
         shutil.copy(source_dir + filename, target_dir)
