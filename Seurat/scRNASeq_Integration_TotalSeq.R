@@ -165,7 +165,7 @@ filtering_object <- function(Sample_object,sample_list){
   Sample_object <- FindVariableFeatures(Sample_object, selection.method = "vst", nfeatures = config$HVF_selection)
 }
 
-Object_list <- lapply(FUN=filtering_object, Object_list, sample_names)
+Object_list <- mapply(FUN=filtering_object, Object_list, sample_names)
 message("**Starting with QC and data normalization...**")
 #Run the function through all samples and get one object per sample. 
 
