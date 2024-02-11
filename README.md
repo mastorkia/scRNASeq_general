@@ -35,17 +35,17 @@ python TotalSeq_cellranger.py -f sample.lst -c config_cellranger.yml -a MULTI
 where, ```sample.lst``` file contains the absolute path to fastq file(s). Each sample will be comprised of 8 fastq files. 
 ```bash
 $ cat ./cellranger/MULTI/sample.list 
-/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_Ab_S1_L001_I1_001.fastq.gz
-/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_Ab_S1_L001_I2_001.fastq.gz
-/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_Ab_S1_L001_R1_001.fastq.gz
-/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_Ab_S1_L001_R2_001.fastq.gz
-/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_GEX_S1_L002_I1_001.fastq.gz
-/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_GEX_S1_L002_I2_001.fastq.gz
-/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_GEX_S1_L002_R1_001.fastq.gz
-/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_GEX_S1_L002_R2_001.fastq.gz
+MMC-79-89-93-A_Ab_S1_L001_I1_001.fastq.gz
+MMC-79-89-93-A_Ab_S1_L001_I2_001.fastq.gz
+MMC-79-89-93-A_Ab_S1_L001_R1_001.fastq.gz
+MMC-79-89-93-A_Ab_S1_L001_R2_001.fastq.gz
+MMC-79-89-93-A_GEX_S1_L002_I1_001.fastq.gz
+MMC-79-89-93-A_GEX_S1_L002_I2_001.fastq.gz
+MMC-79-89-93-A_GEX_S1_L002_R1_001.fastq.gz
+MMC-79-89-93-A_GEX_S1_L002_R2_001.fastq.gz
 ```
 
-And where, ```CMO_reference.csv``` and ```MMC-79-89-93-A.config``` will look in the ```/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/``` location:
+And where, ```CMO_reference.csv``` and ```MMC-79-89-93-A.config``` will look in the ```test_cellranger/``` location:
 
 
 ```bash
@@ -85,14 +85,14 @@ python TotalSeq_cellranger.py -f sample.lst -c config_cellranger.yml -a COUNT
 where, ```sample.lst``` file contains the absolute path to fastq file(s). Each sample will be comprised of 8 fastq files. 
 ```bash
 $ cat ./cellranger/COUNT/sample.list 
-/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_Ab_S1_L001_I1_001.fastq.gz
-/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_Ab_S1_L001_I2_001.fastq.gz
-/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_Ab_S1_L001_R1_001.fastq.gz
-/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_Ab_S1_L001_R2_001.fastq.gz
-/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_GEX_S1_L002_I1_001.fastq.gz
-/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_GEX_S1_L002_I2_001.fastq.gz
-/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_GEX_S1_L002_R1_001.fastq.gz
-/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/MMC-79-89-93-A_GEX_S1_L002_R2_001.fastq.gz
+MMC-79-89-93-A_Ab_S1_L001_I1_001.fastq.gz
+MMC-79-89-93-A_Ab_S1_L001_I2_001.fastq.gz
+MMC-79-89-93-A_Ab_S1_L001_R1_001.fastq.gz
+MMC-79-89-93-A_Ab_S1_L001_R2_001.fastq.gz
+MMC-79-89-93-A_GEX_S1_L002_I1_001.fastq.gz
+MMC-79-89-93-A_GEX_S1_L002_I2_001.fastq.gz
+MMC-79-89-93-A_GEX_S1_L002_R1_001.fastq.gz
+MMC-79-89-93-A_GEX_S1_L002_R2_001.fastq.gz
 ```
 And where, ```MMC-79-89-93-A_CMO.csv``` and ```MMC-79-89-93-A_count_Abs.config``` will look in the ```/share/data/RNA_Seq/MECFS_scRNAseq/Working/April19_2022/test_cellranger/``` location:
 
@@ -193,14 +193,6 @@ where, ```seurat_sample_metadata.csv``` file contains phenotipic information abo
 $ cat ./Seurat/seurat_sample_metadata.csv 
 porig.ident,MMA ID,Record ID,SAM ID,Current Age,Sex,Collection date,Condition
 MMC_0079,MMA_801,463,SAM000801,38,Female,4_22_2021,PASC
-MMC_0089,MMA_807,254,SAM000807,41,Female,4_22_2021,HC
-MMC_0093,MMA_808,43,SAM000808,30,Female,4_22_2021,ME_CFS
-MMC_0097,MMA_809,74,SAM000809,25,Female,4_22_2021,ME_CFS
-MMC_0107,MMA_810,503,SAM000810,26,Female,4_22_2021,PASC
-MMC_0117,MMA_800,436,SAM000800,30,Female,4_22_2021,PASC
-MMC_0125,MMA_802,230,SAM000802,40,Female,4_22_2021,ME_CFS
-MMC_0135,MMA_811,45,SAM000811,57,Female,4_22_2021,ME_CFS
-MMC_0144,MMA_803,454,SAM000803,47,Female,4_22_2021,PASC
 ```
 ### Run Seurat through different scripts. 
 Seurat will run through three different scripts. The configuration file will determine the input name, ouput name or the type of analysis we used in cellranger. 
